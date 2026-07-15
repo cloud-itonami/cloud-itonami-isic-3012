@@ -1,0 +1,41 @@
+{:itonami.blueprint/id "cloud-itonami-isic-3012"
+ :itonami.blueprint/name "Building of pleasure and sporting boats"
+ :itonami.blueprint/isic-rev5 "3012"
+ :itonami.blueprint/domain :boat-building/manufacturing
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:worker-safety :occupant-safety :boater-safety]
+ :itonami.blueprint/governor :boat-building-plant-operations-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger :eda :cae]
+ :itonami.blueprint/optional-technologies []
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/maturity :implemented
+ :itonami.blueprint/implemented-slice
+ "BoatAdvisor ⊣ Boat Building Plant Operations Governor,
+ langgraph-clj StateGraph, append-only audit ledger. A plant
+ OPERATIONS COORDINATION actor for pleasure and sporting boat
+ building (hull-molding/rigging/final-assembly/water-test lines
+ producing finished sailboats, motorboats, personal watercraft and
+ other pleasure/sporting craft) -- not direct hull-molding/rigging/
+ final-assembly/water-test-equipment control authority and not a
+ marine-classification / seaworthiness-certification authority. Four
+ ops (`:log-production-batch` / `:schedule-maintenance` /
+ `:flag-safety-concern` / `:coordinate-shipment`), all `:effect
+ :propose` only. Twelve concrete governor checks elaborate this
+ blueprint's four HARD invariants: propose-only effect, closed op
+ allowlist, closed proposal-effect allowlist (no direct hull-molding/
+ rigging/final-assembly/water-test-equipment control), permanent
+ equipment-actuate block, permanent marine-classification/
+ seaworthiness-certification-authority block (this actor never
+ self-issues an ISO 12217 stability-and-buoyancy assessment or a CE
+ Recreational Craft Directive conformity mark), independent equipment
+ verification/registration before maintenance scheduling, independent
+ batch verification/registration before shipment coordination,
+ independent shipment-quantity recompute against the batch's own
+ logged production quantity, double-schedule guard, product-category
+ validation, hull-length plausibility validation, and hull-defect-
+ rate plausibility validation. Safety-concern flagging (hull-
+ integrity-defect/buoyancy-test-failure/materials-safety) ALWAYS
+ escalates to a human plant supervisor; `:log-production-batch` is
+ the only op eligible to auto-commit, and only at phase 3 when
+ governor-clean."}
