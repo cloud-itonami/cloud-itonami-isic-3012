@@ -13,7 +13,7 @@
     -> `boatmfg.phase`    (staged-rollout gate)
     -> `boatmfg.store`    (SSoT + append-only ledger)
   driven through `langgraph.graph/run*` exactly as
-  `boatmfg.sim` (`clojure -M:dev:run`) drives it. Nothing on the page
+  `boatmfg.sim` (`kbb -M:dev:run`) drives it. Nothing on the page
   is hand-typed domain data: the batch/equipment rows come from
   `boatmfg.store`'s seeded directory, the dispositions and violation
   rule names come from the real governor verdicts carried on each run's
@@ -37,7 +37,7 @@
   hash-order dependence enters the page, so two consecutive runs are
   byte-identical (verified by diffing them).
 
-  Usage: `clojure -M:dev:render-html [out-file]`
+  Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
   (:require [jp-go-dds.skin]
             [kotoba.lang.text :as str]
@@ -317,7 +317,7 @@
 
      "  <section class=\"card\">\n"
      "    <h2>生産バッチ / Production batches</h2>\n"
-     "    <p class=\"muted\">Build-time snapshot generated from <code>boatmfg.store</code> by actually running <code>boatmfg.operation</code> (<code>clojure -M:dev:render-html</code>). Every value below is real actor output — no hand-written rows.</p>\n"
+     "    <p class=\"muted\">Build-time snapshot generated from <code>boatmfg.store</code> by actually running <code>boatmfg.operation</code> (<code>kbb -M:dev:render-html</code>). Every value below is real actor output — no hand-written rows.</p>\n"
      "    <table>\n"
      "      <thead><tr><th>Batch</th><th>Category</th><th>Hull LOA (m)</th><th>Quantity (units)</th><th>Shipped (units)</th><th>Defect rate (%)</th><th>Ground truth</th><th>Last assessed</th><th>Last op</th></tr></thead>\n"
      "      <tbody>\n"
