@@ -1,0 +1,41 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README: an ISIC 3012 plant molds hulls, rigs and assembles pleasure and
+;; sporting boats, and inspects the craft on water-test (buoyancy/stability)
+;; benches. The physical work around that plant: an arm hanging an outboard
+;; motor on the transom, post-curing a moulded FRP hull laminate, and
+;; draining the water-test tank between boats.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-3012"
+ :cases
+ [{:id :hang-outboard-on-transom
+   :kind :manipulator
+   :procedure "final-assembly arm lifts an outboard motor off its stand and hangs it on the boat's transom bracket"
+   :params {:l1-m 0.70 :l2-m 0.60 :m1-kg 12.0 :m2-kg 8.0
+            :from [0.80 0.00] :to [0.45 0.70] :duration-s 4.0 :steps 500}
+   :sweep {:param :payload-kg :values [15.0 25.0 35.0 50.0 70.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 400.0 :basis "estimate: continuous shoulder torque of a ~30 kg-payload industrial arm class"}
+   :boundary {:lo 1.0 :hi 120.0}}
+  {:id :hull-laminate-post-cure
+   :kind :thermal
+   :procedure "moulded glass/polyester hull laminate post-cures in a 60 C curing room until its inner (mould-side) face reaches 55 C"
+   :params {:conductivity-w-mk 0.30 :density-kg-m3 1600.0 :specific-heat-j-kgk 1200.0
+            :t0-c 20.0 :t-hot-c 60.0 :h-front-w-m2k 15.0 :t-back-ambient-c 60.0 :h-back-w-m2k 3.0
+            :threshold-c 55.0 :duration-s 21600.0 :nodes 11}
+   :sweep {:param :thickness-m :values [0.004 0.006 0.010 0.015 0.020]}
+   :quantity :time-to-threshold-s
+   :limit {:max 7200.0 :basis "estimate: a 2-hour slot in the curing room per hull; the mould side sits in the same room air but is lagged (h = 3 W/m2K) by the mould itself"}
+   :boundary {:lo 0.002 :hi 0.04}}
+  {:id :drain-water-test-tank
+   :kind :tank-drain
+   :procedure "after a buoyancy/stability water test, the 6 m x 2 m test tank drains from 1.2 m to 0.05 m through its bottom valve"
+   :params {:tank-area-m2 12.0 :h0-m 1.2 :h-target-m 0.05 :cd 0.62 :dt-s 0.5 :max-time-s 36000.0}
+   :sweep {:param :orifice-area-m2 :values [0.005 0.0079 0.0123 0.0177 0.0314]}
+   :quantity :time-to-target-s
+   :limit {:max 1800.0 :basis "estimate: the tank must be empty within 30 minutes to keep the next boat's test slot"}
+   :boundary {:lo 0.002 :hi 0.05}}]}
