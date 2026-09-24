@@ -39,7 +39,7 @@
 
   Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
-  (:require [jp-go-dds.skin]
+  (:require [kotoba.io :as kio] [jp-go-dds.skin]
             [kotoba.lang.text :as str]
             [boatmfg.store :as store]
             [boatmfg.operation :as op]
@@ -403,7 +403,7 @@
         result (run-demo!)
         db (:db result)
         html (render result)]
-    (.mkdirs (java.io.File. (or (.getParent (java.io.File. ^String out)) ".")))
+    (kio/mkdirs (kio/file (or (kio/parent (kio/file ^String out)) ".")))
     (spit out html)
     (println "wrote" out
              "(" (count (store/ledger db)) "ledger facts,"
